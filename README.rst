@@ -18,5 +18,6 @@ Targets
 .. code-block:: bash
 
     tbot -l labconfig.py -b boardconfig.py -vv uboot_build
+    tbot -l labconfig.py -b boardconfig.py -vv install
     tbot -l labconfig.py -b boardconfig.py -vv interactive_uboot
     tbot -l labconfig.py -b boardconfig.py -vv interactive_linux

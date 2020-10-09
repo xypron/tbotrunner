@@ -30,6 +30,12 @@ class MyUBootBuilder(tbot.tc.uboot.UBootBuilder):
     defconfig = "orangepi_pc_defconfig"
     toolchain = "arm"
     remote = "https://gitlab.denx.de/u-boot/u-boot.git"
+    testpy_boardenv = ""
+
+    def install(self, host, path: str):
+        host.exec0("sd-mux-ctrl", "-v", "0", "-ts")
+        host.exec0(f"dd", "conv=fsync,notrunc", f"if={path}/u-boot-sunxi-with-spl.bin", "of=/dev/sda", "bs=8k", "seek=1")
+        pass
 
 class MyBoardUBoot(
     board.Connector,
