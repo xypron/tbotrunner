@@ -10,8 +10,8 @@ class MyCredentials:
             "orangepipc" : "password"
             }
 
-    def getUsername(self, system :str) -> str:
+    def get_username(self, system: str) -> str:
         return self.username[system]
 
-    def getPassword(self, system: str) -> str:
+    def get_password(self, system: str) -> str:
         return self.password[system]

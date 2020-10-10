@@ -53,8 +53,8 @@ class MyLinux(
     linux.Ash,
 ):
     cred = MyCredentials()
-    username = cred.getUsername("orangepipc")
-    password = cred.getPassword("orangepipc")
+    username = cred.get_username("orangepipc")
+    password = cred.get_password("orangepipc")
     cred = None
 
 LINUX = MyLinux
