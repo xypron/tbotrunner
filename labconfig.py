@@ -34,7 +34,7 @@ class MyLabHost(
 
     def build(self):
         tbot.log.message(tbot.log.c("Message").yellow.bold + ": MyLabHost.build")
-        return self
+        return self.clone()
 
     def enable(self, toolchain_name):
         """
