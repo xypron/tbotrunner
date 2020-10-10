@@ -37,6 +37,8 @@ class MyLabHost(
         """
         return {
             "arm": MyToolChain("arm", "arm-linux-gnueabihf-"),
+            "arm64": MyToolChain("arm64", "aarch64-linux-gnu-"),
+            "riscv": MyToolChain("riscv", "riscv64-linux-gnu-"),
         }
 
     def build(self):
