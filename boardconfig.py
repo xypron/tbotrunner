@@ -8,7 +8,7 @@ class MyBoard(
     board.PowerControl,
     board.Board,
 ):
-    name = "OrangePi PC"
+    name = "OrangePiPC"
 
     def poweron(self):
         self.host.exec0("relay-card", "off")
