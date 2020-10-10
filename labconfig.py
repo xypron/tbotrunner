@@ -1,24 +1,30 @@
-from tbot.machine import connector, linux, board
+""" Lab definition
+"""
+import socket
 import typing
 import tbot
-import os
-import socket
+from tbot.machine import connector, linux
 
 class MyToolChain(linux.build.Toolchain):
+    """ Generic Toolchain for cross compilation
+    """
 
     def __init__(self, arch: str, prefix: str) -> None:
         self.arch = arch
         self.prefix = prefix
 
     def enable(self, host) -> None:
-        host.exec0("export", 'CROSS_COMPILE={}'.format(self.prefix));
-        pass
+        """ Enable selected Toolchain
+        """
+        host.exec0("export", 'CROSS_COMPILE={}'.format(self.prefix))
 
 class MyLabHost(
-    connector.SubprocessConnector,
-    linux.Bash,
-    linux.Lab,
-):
+        connector.SubprocessConnector,
+        linux.Bash,
+        linux.Lab,
+    ):
+    """ Generic Lab definition
+    """
     name = socket.gethostname()
 
     @property
@@ -27,13 +33,13 @@ class MyLabHost(
 
     @property
     def toolchains(self) -> typing.Dict[str, linux.build.Toolchain]:
-        tbot.log.message(tbot.log.c("Message").yellow.bold + ": MyLabHost.toolchains")
+        """ Define Toolchains
+        """
         return {
             "arm": MyToolChain("arm", "arm-linux-gnueabihf-"),
         }
 
     def build(self):
-        tbot.log.message(tbot.log.c("Message").yellow.bold + ": MyLabHost.build")
         return self.clone()
 
     def enable(self, toolchain_name):
