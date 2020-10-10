@@ -1,13 +1,18 @@
-from tbot.machine import connector, board, linux
+""" Board configuration module for the OrangePi PC.
+"""
 import time
 import tbot
+from tbot.machine import connector, board, linux
 from credentials import MyCredentials
 
 class MyBoard(
-    connector.ConsoleConnector,
-    board.PowerControl,
-    board.Board,
-):
+        connector.ConsoleConnector,
+        board.PowerControl,
+        board.Board,
+    ):
+    """ Board definition for the OrangePi PC.
+    """
+
     name = "OrangePiPC"
 
     def poweron(self):
@@ -21,11 +26,18 @@ class MyBoard(
 
     def connect(self, mach):
         # Open the serial console
-        return mach.open_channel("picocom", "-b", "115200", "/dev/serial/by-path/platform-3f980000.usb-usb-0:1.1.3:1.0-port0")
+        return mach.open_channel(
+            "picocom", "-b", "115200",
+            "/dev/serial/by-path/platform-3f980000.usb-usb-0:1.1.3:1.0-port0")
+
+    def clone(self):
+        raise NotImplementedError("Cannot clone serial connection")
 
 BOARD = MyBoard
 
 class MyUBootBuilder(tbot.tc.uboot.UBootBuilder):
+    """ Builder for the OrangePi PC.
+    """
     name = "orangepipc"
     defconfig = "orangepi_pc_defconfig"
     toolchain = "arm"
@@ -33,25 +45,33 @@ class MyUBootBuilder(tbot.tc.uboot.UBootBuilder):
     testpy_boardenv = ""
 
     def install(self, host, path: str):
+        """ Copy image to SD card.
+        """
         host.exec0("sd-mux-ctrl", "-v", "0", "-ts")
-        host.exec0(f"dd", "conv=fsync,notrunc", f"if={path}/u-boot-sunxi-with-spl.bin", "of=/dev/sda", "bs=8k", "seek=1")
-        pass
+        host.exec0(
+            f"dd", "conv=fsync,notrunc",
+            f"if={path}/u-boot-sunxi-with-spl.bin", "of=/dev/sda",
+            "bs=8k", "seek=1")
 
 class MyBoardUBoot(
-    board.Connector,
-    board.UBootAutobootIntercept,
-    board.UBootShell,
-):
+        board.Connector,
+        board.UBootAutobootIntercept,
+        board.UBootShell,
+    ):
+    """ U-Boot testing for the OrangePi PC.
+    """
     prompt = "=> "
     build = MyUBootBuilder()
 
 UBOOT = MyBoardUBoot
 
 class MyLinux(
-    board.Connector,
-    board.LinuxBootLogin,
-    linux.Ash,
-):
+        board.Connector,
+        board.LinuxBootLogin,
+        linux.Ash,
+    ):
+    """ Linux testing for the OrangePi PC.
+    """
     cred = MyCredentials()
     username = cred.get_username("orangepipc")
     password = cred.get_password("orangepipc")
