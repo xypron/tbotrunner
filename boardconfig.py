@@ -3,7 +3,7 @@
 import time
 import tbot
 from tbot.machine import connector, board, linux
-from tbot.tc import kconfig
+from tbot.tc import git, kconfig
 from credentials import MyCredentials
 
 class MyBoard(
@@ -58,6 +58,12 @@ class MyUBootBuilder(tbot.tc.uboot.UBootBuilder):
         kconfig.enable(repo / ".config", "CONFIG_CMD_EFIDEBUG")
         kconfig.enable(repo / ".config", "CONFIG_UNIT_TEST")
         bh.exec0("make", "olddefconfig")
+
+    def do_checkout(self, target, clean, rev) -> git.GitRepository:
+        branch = "master"
+        return git.GitRepository(
+            target=target, url=self.remote, clean=clean, rev=branch
+        )
 
     def install(self, host, path: str):
         """ Copy image to SD card.
