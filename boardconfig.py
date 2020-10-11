@@ -3,6 +3,7 @@
 import time
 import tbot
 from tbot.machine import connector, board, linux
+from tbot.tc import kconfig
 from credentials import MyCredentials
 
 class MyBoard(
@@ -43,6 +44,18 @@ class MyUBootBuilder(tbot.tc.uboot.UBootBuilder):
     toolchain = "arm"
     remote = "https://gitlab.denx.de/u-boot/u-boot.git"
     testpy_boardenv = ""
+
+
+    # def do_configure(self, bh: linux.Builder,
+    def do_configure(self, bh, repo) -> None:
+        super().do_configure(bh, repo)
+
+        tbot.log.message(tbot.log.c("Toolchain").yellow.bold +
+                         ': Patching configuration')
+        kconfig.enable(repo / ".config", "CONFIG_CMD_BOOTEFI_SELFTEST")
+        kconfig.enable(repo / ".config", "CONFIG_CMD_BOOTEFI_HELLO")
+        kconfig.enable(repo / ".config", "CONFIG_CMD_NVEDIT_EFI")
+        kconfig.enable(repo / ".config", "CONFIG_CMD_EFIDEBUG")
 
     def install(self, host, path: str):
         """ Copy image to SD card.
