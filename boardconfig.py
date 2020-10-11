@@ -56,6 +56,8 @@ class MyUBootBuilder(tbot.tc.uboot.UBootBuilder):
         kconfig.enable(repo / ".config", "CONFIG_CMD_BOOTEFI_HELLO")
         kconfig.enable(repo / ".config", "CONFIG_CMD_NVEDIT_EFI")
         kconfig.enable(repo / ".config", "CONFIG_CMD_EFIDEBUG")
+        kconfig.enable(repo / ".config", "CONFIG_UNIT_TEST")
+        bh.exec0("make", "olddefconfig")
 
     def install(self, host, path: str):
         """ Copy image to SD card.
