@@ -18,8 +18,8 @@ class MyBoard(
 
     def poweron(self):
         self.host.exec0("relay-card", "off")
-        time.sleep(3)
         self.host.exec0("sd-mux-ctrl", "-v", "0", "-td")
+        time.sleep(3)
         self.host.exec0("relay-card", "on")
 
     def poweroff(self):
@@ -61,6 +61,7 @@ class MyUBootBuilder(tbot.tc.uboot.UBootBuilder):
         """ Copy image to SD card.
         """
         host.exec0("sd-mux-ctrl", "-v", "0", "-ts")
+        time.sleep(3)
         host.exec0(
             f"dd", "conv=fsync,notrunc",
             f"if={path}/u-boot-sunxi-with-spl.bin", "of=/dev/sda",
