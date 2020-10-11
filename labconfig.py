@@ -1,5 +1,6 @@
 """ Lab definition
 """
+import os
 import socket
 import typing
 import tbot
@@ -29,7 +30,8 @@ class MyLabHost(
 
     @property
     def workdir(self):
-        return linux.Workdir.static(self, f"/tmp/tbot-workdir")
+        mypath = os.path.dirname(os.path.realpath(__file__)) + '/tbot-workdir'
+        return linux.Workdir.static(self, mypath)
 
     @property
     def toolchains(self) -> typing.Dict[str, linux.build.Toolchain]:
